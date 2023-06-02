@@ -29,6 +29,8 @@ class PotentialField : public rclcpp::Node
       cmd_pub  = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel",10);
       // Create Publihser of the attraction vector
       att_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("attraction_vector",10);
+      // Create Publihser of the attraction vector
+      rep_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("repulsion_vector",10);
       
     }
 
@@ -74,6 +76,7 @@ class PotentialField : public rclcpp::Node
 
 
     }
+    
 
   private:
 
@@ -101,7 +104,7 @@ class PotentialField : public rclcpp::Node
 
         //RCLCPP_INFO(this->get_logger(), "Odometry : x = %f | y = %f | theta = %f" , x , y, theta);
 
-        ComputeAttraction(1,1);
+        ComputeAttraction(-1,-1);
     }
     void scan_callback(sensor_msgs::msg::LaserScan::SharedPtr _msg)
     {
@@ -114,10 +117,51 @@ class PotentialField : public rclcpp::Node
 
     //RCLCPP_INFO(this->get_logger(), "scan is %d long",sizeof(scan));
 
-    //for(int i = 0; i < len;i++)
-    //{
-    //  RCLCPP_INFO(this->get_logger(), "scan : nbr = %d |  value= %f", i , scan[i]);
-    //}
+
+    float alpha  = 0;
+    float module = 0;
+
+    float final_x = 0;
+    float final_y = 0;
+
+    for(int i = 0; i < len;i++)
+    {
+      //RCLCPP_INFO(this->get_logger(), "scan : nbr = %d |  value= %f", i , scan[i]);
+      //module = sqrt(pow(module,2)+pow(module,2));
+      //alpha = atan2(angle_min+step*i,alpha);
+      if(scan[i] < 100)
+      {
+        //RCLCPP_INFO(this->get_logger(), "Scan : %f",scan[i]);
+        final_x += scan[i] * cos(angle_min+step*i);
+        final_y += scan[i] * sin(angle_min+step*i);
+      }
+      
+    }
+
+    alpha = atan2(final_y,final_x) + 3.14159;
+    // Create the attraction vector to show in RVIZ
+    geometry_msgs::msg::PoseStamped repulsion;
+    // Set the frame id
+    std::string id_frame = "/odom";
+    repulsion.header.frame_id = id_frame;
+    // Set the time stamp (current time)
+    repulsion.header.stamp = this->get_clock()->now();
+    // set the position (it's always (0,0,0) as the reference frame is odom)
+    repulsion.pose.position.x = 0 ;
+    repulsion.pose.position.y = 0 ;
+    repulsion.pose.position.z = 0 ;
+
+    // Init variable of quaterion 
+    tf2::Quaternion q;
+    // Set the quaterion using euler angles
+    q.setRPY(0,0,alpha);
+    // Convert the geometry::quaternion message into pose::quaterion message
+    repulsion.pose.orientation = tf2::toMsg(q);
+    // Publish it
+    rep_pub->publish(repulsion);
+
+
+
 
       
 
@@ -129,13 +173,15 @@ class PotentialField : public rclcpp::Node
     //  RCLCPP_INFO(this->get_logger(), "Scan : %f",scan);
     }
     // odom subsriber variable declaration
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr sub_odom;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr      sub_odom;
     // scan subsriber variable declaration
-    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub_scan;
+    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr  sub_scan;
     // robot control publisher variable declaration
-    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_pub;
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr        cmd_pub;
     // attraction vector publisher variable declaration
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr  att_pub;
+    // repulsion vector publisher variable declaration
+    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr  rep_pub;
     // Declare position
     double x;
     double y;
@@ -148,6 +194,7 @@ class PotentialField : public rclcpp::Node
     std::vector<float> V_attraction ;
 
     int Q_minus = 1 ;
+    std::vector<float> V_repulsion ;
 };
 
 int main(int argc, char * argv[])
