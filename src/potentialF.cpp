@@ -34,6 +34,33 @@ class PotentialField : public rclcpp::Node
       
     }
 
+    geometry_msgs::msg::PoseStamped PublishVector(float x, float y)
+    {
+
+      // Create the attraction vector to show in RVIZ
+      geometry_msgs::msg::PoseStamped vector;
+      // Set the frame id
+      std::string id_frame = "/odom";
+      vector.header.frame_id = id_frame;
+      // Set the time stamp (current time)
+      vector.header.stamp = this->get_clock()->now();
+      // set the position (it's always (0,0,0) as the reference frame is odom)
+      vector.pose.position.x = 0 ;
+      vector.pose.position.y = 0 ;
+      vector.pose.position.z = 0 ;
+      // Compute the theta angle
+      float angle = atan2(y,x);
+      // Init variable of quaterion 
+      tf2::Quaternion q;
+      // Set the quaterion using euler angles
+      q.setRPY(0,0,angle);
+      // Convert the geometry::quaternion message into pose::quaterion message
+      vector.pose.orientation = tf2::toMsg(q);
+      // Publish it
+
+      return vector;
+
+    }
 
     void ComputeAttraction(float x_a, float y_a)
     {
@@ -48,32 +75,12 @@ class PotentialField : public rclcpp::Node
       // Create the Module of the force to simulate
       F_attraction = (Q_minus * Q_attraction )/ 4 * 3.14 * pow(distance,2);
       
-      
-      // Create the attraction vector to show in RVIZ
-      geometry_msgs::msg::PoseStamped attraction;
-      // Set the frame id
-      std::string id_frame = "/odom";
-      attraction.header.frame_id = id_frame;
-      // Set the time stamp (current time)
-      attraction.header.stamp = this->get_clock()->now();
-      // set the position (it's always (0,0,0) as the reference frame is odom)
-      attraction.pose.position.x = 0 ;
-      attraction.pose.position.y = 0 ;
-      attraction.pose.position.z = 0 ;
-      // Compute the theta angle
-      float angle = atan2(x_a,y_a);
-      // Init variable of quaterion 
-      tf2::Quaternion q;
-      // Set the quaterion using euler angles
-      q.setRPY(0,0,angle);
-      // Convert the geometry::quaternion message into pose::quaterion message
-      attraction.pose.orientation = tf2::toMsg(q);
-      // Publish it
-      att_pub->publish(attraction);
-
+    
       //RCLCPP_INFO(this->get_logger(), "f_attraction is :%f",F_attraction);
       //RCLCPP_INFO(this->get_logger(), "v_attraction is : x = %f ; y = %f",x,y);
 
+      geometry_msgs::msg::PoseStamped attraction = PublishVector(x_a,y_a);
+      att_pub->publish(attraction);
 
     }
     
@@ -138,26 +145,8 @@ class PotentialField : public rclcpp::Node
       
     }
 
-    alpha = atan2(final_y,final_x) + 3.14159;
-    // Create the attraction vector to show in RVIZ
-    geometry_msgs::msg::PoseStamped repulsion;
-    // Set the frame id
-    std::string id_frame = "/odom";
-    repulsion.header.frame_id = id_frame;
-    // Set the time stamp (current time)
-    repulsion.header.stamp = this->get_clock()->now();
-    // set the position (it's always (0,0,0) as the reference frame is odom)
-    repulsion.pose.position.x = 0 ;
-    repulsion.pose.position.y = 0 ;
-    repulsion.pose.position.z = 0 ;
+    geometry_msgs::msg::PoseStamped repulsion = PublishVector(-final_x,-final_y);
 
-    // Init variable of quaterion 
-    tf2::Quaternion q;
-    // Set the quaterion using euler angles
-    q.setRPY(0,0,alpha);
-    // Convert the geometry::quaternion message into pose::quaterion message
-    repulsion.pose.orientation = tf2::toMsg(q);
-    // Publish it
     rep_pub->publish(repulsion);
 
 
