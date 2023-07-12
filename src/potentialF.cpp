@@ -30,8 +30,42 @@ class PotentialField : public rclcpp::Node
       // Create Publihser of the attraction vector
       att_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("attraction_vector",10);
       // Create Publihser of the attraction vector
-      rep_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("repulsion_vector",10);
+      rep_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("repulsion_vector",1);
       
+    }
+
+    void controller()
+    {
+
+      double x_final = V_attraction[0] + V_repulsion[0];
+      double y_final = V_attraction[1] + V_repulsion[1];
+
+      geometry_msgs::msg::Twist direction;
+
+      double tolerance = 0.1 ;
+      double angle = atan2(y,x);
+      if(angle < theta - tolerance)
+      {
+        direction.angular.z = -0.1;
+        direction.linear.x  = 0;
+        // v angle +
+      }
+      else if(angle > theta + tolerance)
+      {
+        // v angle -
+        direction.angular.z = 0.1;
+        direction.linear.x  = 0;
+      }
+      else
+      {
+        // v forward +
+        direction.linear.x  = 0.1;
+        direction.angular.z = 0;
+      
+      }
+
+      cmd_pub->publish(direction);
+            
     }
 
     geometry_msgs::msg::PoseStamped PublishVector(float x, float y)
@@ -70,10 +104,11 @@ class PotentialField : public rclcpp::Node
       // Compute the point to reach relative to the current position
       x_a = x_a - x;
       y_a = y_a - y;
+            // Create the Module of the force to simulate
+      F_attraction = (Q_repulsion * Q_attraction )/ 4 * 3.14 * pow(distance,2);
       // Create the position of the force to simulate
-      V_attraction = {x_a,y_a};
-      // Create the Module of the force to simulate
-      F_attraction = (Q_minus * Q_attraction )/ 4 * 3.14 * pow(distance,2);
+      V_attraction = {F_attraction * x_a , F_attraction * y_a};
+
       
     
       //RCLCPP_INFO(this->get_logger(), "f_attraction is :%f",F_attraction);
@@ -122,44 +157,58 @@ class PotentialField : public rclcpp::Node
       auto scan       = _msg->ranges;
       auto len        = int(float(scan.size()));
 
-    //RCLCPP_INFO(this->get_logger(), "scan is %d long",sizeof(scan));
+      int counter = 0;
 
 
-    float alpha  = 0;
-    float module = 0;
+      float x_r = 0;
+      float y_r = 0;
 
-    float final_x = 0;
-    float final_y = 0;
-
-    for(int i = 0; i < len;i++)
-    {
-      //RCLCPP_INFO(this->get_logger(), "scan : nbr = %d |  value= %f", i , scan[i]);
-      //module = sqrt(pow(module,2)+pow(module,2));
-      //alpha = atan2(angle_min+step*i,alpha);
-      if(scan[i] < 100)
+      for(int i = 0 ; i < len ; i++)
       {
-        //RCLCPP_INFO(this->get_logger(), "Scan : %f",scan[i]);
-        final_x += scan[i] * cos(angle_min+step*i);
-        final_y += scan[i] * sin(angle_min+step*i);
+        // If the value of the scan is < 100m it's not tacking into account
+        if(scan[i] < 100 and scan[i] > 0.1)
+        {
+          //RCLCPP_INFO(this->get_logger(), "Scan n: %d | value: %f",i,scan[i]);
+          float Current_Q = (Q_attraction * Q_repulsion) / (4 * 3.14 * pow(10*scan[i],2));
+          // Projection of the vectors in the x , y coordinates
+          x_r += Current_Q * cos(angle_min+step*i);
+          y_r += Current_Q * sin(angle_min+step*i);
+          
+        }
+        else
+        {
+          counter += 1;
+        }
+        
       }
-      
-    }
+      //RCLCPP_INFO(this->get_logger(), "Counter : %d  ",counter);
+      x_r = -x_r;
+      y_r = -y_r;
 
-    geometry_msgs::msg::PoseStamped repulsion = PublishVector(-final_x,-final_y);
+      if(counter == 360)
+      {
+        // compute the lenght
+        Q_repulsion = 0;
+        // Compute the repulsion vector
+        V_repulsion = {1,0};
+      }
+      else
+      {
+        // compute the lenght
+        Q_repulsion = sqrt(pow(x_r,2)+pow(y_r,2));
+        // Compute the repulsion vector
+        V_repulsion = {x_r,y_r};
+      }
 
-    rep_pub->publish(repulsion);
+      RCLCPP_INFO(this->get_logger(), "angle repulsion : %f  ",atan2(y_r,x_r));
 
 
+      // Create the vector for Rviz
+      geometry_msgs::msg::PoseStamped repulsion = PublishVector(x_r,y_r);
+      // Publish the vector
+      rep_pub->publish(repulsion);
 
 
-      
-
-    //  float angle_min = msg->angle_min;
-    //  float angle_max = msg->angle_max;
-    //  auto scan = msg->ranges;
-
-      //RCLCPP_INFO(this->get_logger(), "Scan : min = %f | max = %f",angle_min,angle_max);
-    //  RCLCPP_INFO(this->get_logger(), "Scan : %f",scan);
     }
     // odom subsriber variable declaration
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr      sub_odom;
@@ -179,10 +228,10 @@ class PotentialField : public rclcpp::Node
     // declare attraction vector
     float F_attraction;
   
-    int Q_attraction = 100;
+    int Q_attraction = 50;
     std::vector<float> V_attraction ;
 
-    int Q_minus = 1 ;
+    int Q_repulsion = 1;
     std::vector<float> V_repulsion ;
 };
 
