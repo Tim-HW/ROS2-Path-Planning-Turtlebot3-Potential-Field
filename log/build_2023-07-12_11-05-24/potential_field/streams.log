@@ -1,0 +1,93 @@
+[0.009s] Invoking command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake /home/tim/DREAM/ros2_ws/src/potential_field -DCMAKE_INSTALL_PREFIX=/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field
+[0.187s] -- The C compiler identification is GNU 9.4.0
+[0.240s] -- The CXX compiler identification is GNU 9.4.0
+[0.246s] -- Check for working C compiler: /usr/bin/cc
+[0.290s] -- Check for working C compiler: /usr/bin/cc -- works
+[0.291s] -- Detecting C compiler ABI info
+[0.337s] -- Detecting C compiler ABI info - done
+[0.344s] -- Detecting C compile features
+[0.345s] -- Detecting C compile features - done
+[0.347s] -- Check for working CXX compiler: /usr/bin/c++
+[0.405s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[0.406s] -- Detecting CXX compiler ABI info
+[0.467s] -- Detecting CXX compiler ABI info - done
+[0.474s] -- Detecting CXX compile features
+[0.474s] -- Detecting CXX compile features - done
+[0.481s] -- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)
+[0.499s] -- Found PythonInterp: /home/tim/.conda/envs/ros_foxy/bin/python3 (found suitable version "3.8.16", minimum required is "3") 
+[0.499s] -- Using PYTHON_EXECUTABLE: /home/tim/.conda/envs/ros_foxy/bin/python3
+[0.646s] -- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)
+[0.688s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.695s] -- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)
+[0.770s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+[0.792s] -- Found FastRTPS: /opt/ros/foxy/include  
+[0.850s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.893s] -- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)
+[0.895s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.896s] -- Looking for pthread.h
+[0.946s] -- Looking for pthread.h - found
+[0.946s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[0.999s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+[0.999s] -- Looking for pthread_create in pthreads
+[1.045s] -- Looking for pthread_create in pthreads - not found
+[1.045s] -- Looking for pthread_create in pthread
+[1.095s] -- Looking for pthread_create in pthread - found
+[1.096s] -- Found Threads: TRUE  
+[1.268s] -- Found nav_msgs: 2.0.5 (/opt/ros/foxy/share/nav_msgs/cmake)
+[1.394s] -- Found sensor_msgs: 2.0.5 (/opt/ros/foxy/share/sensor_msgs/cmake)
+[1.472s] -- Found ament_lint_auto: 0.9.8 (/opt/ros/foxy/share/ament_lint_auto/cmake)
+[1.554s] -- Added test 'copyright' to check source files copyright and LICENSE
+[1.560s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.560s] -- Configured cppcheck include dirs: 
+[1.560s] -- Configured cppcheck exclude dirs and/or files: 
+[1.565s] -- Added test 'cpplint' to check C / C++ code against the Google style
+[1.565s] -- Configured cpplint exclude dirs and/or files: 
+[1.566s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.567s] -- Added test 'lint_cmake' to check CMake code style
+[1.568s] -- Added test 'pep257' to check Python code against some of the style conventions in PEP 257
+[1.573s] -- Added test 'uncrustify' to check C / C++ code style
+[1.573s] -- Configured uncrustify additional arguments: 
+[1.576s] -- Added test 'xmllint' to check XML markup files
+[1.578s] -- Configuring done
+[1.584s] -- Generating done
+[1.585s] -- Build files have been written to: /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field
+[1.591s] Invoked command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake /home/tim/DREAM/ros2_ws/src/potential_field -DCMAKE_INSTALL_PREFIX=/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field
+[1.593s] Invoking command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24
+[1.624s] [35m[1mScanning dependencies of target potential_field_node[0m
+[1.648s] [ 50%] [32mBuilding CXX object CMakeFiles/potential_field_node.dir/src/potentialF.cpp.o[0m
+[2.366s] [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:[m[K In member function ‘[01m[Kvoid PotentialField::controller()[m[K’:
+[2.366s] [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:40:14:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kx_final[m[K’ [[01;35m[K-Wunused-variable[m[K]
+[2.366s]    40 |       double [01;35m[Kx_final[m[K = V_attraction[0] + V_repulsion[0];
+[2.367s]       |              [01;35m[K^~~~~~~[m[K
+[2.367s] [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:41:14:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Ky_final[m[K’ [[01;35m[K-Wunused-variable[m[K]
+[2.367s]    41 |       double [01;35m[Ky_final[m[K = V_attraction[1] + V_repulsion[1];
+[2.367s]       |              [01;35m[K^~~~~~~[m[K
+[2.374s] [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:[m[K In member function ‘[01m[Kvoid PotentialField::scan_callback(sensor_msgs::msg::LaserScan_<std::allocator<void> >::SharedPtr)[m[K’:
+[2.374s] [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:157:13:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kangle_max[m[K’ [[01;35m[K-Wunused-variable[m[K]
+[2.374s]   157 |       float [01;35m[Kangle_max[m[K = _msg->angle_max;
+[2.374s]       |             [01;35m[K^~~~~~~~~[m[K
+[5.549s] [100%] [32m[1mLinking CXX executable potential_field_node[0m
+[5.733s] [100%] Built target potential_field_node
+[5.739s] Invoked command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24
+[5.761s] Invoking command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --install /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field
+[5.767s] -- Install configuration: ""
+[5.767s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib/potential_field/potential_field_node
+[5.768s] -- Set runtime path of "/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib/potential_field/potential_field_node" to ""
+[5.768s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field//launch
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field//launch/potential_field.launch.py
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/ament_index/resource_index/package_run_dependencies/potential_field
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/ament_index/resource_index/parent_prefix_path/potential_field
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/environment/ament_prefix_path.sh
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/environment/ament_prefix_path.dsv
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/environment/path.sh
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/environment/path.dsv
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/local_setup.bash
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/local_setup.sh
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/local_setup.zsh
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/local_setup.dsv
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.dsv
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/ament_index/resource_index/packages/potential_field
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/cmake/potential_fieldConfig.cmake
+[5.769s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/cmake/potential_fieldConfig-version.cmake
+[5.770s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.xml
+[5.772s] Invoked command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --install /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field

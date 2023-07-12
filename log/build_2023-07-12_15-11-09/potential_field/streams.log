@@ -1,0 +1,23 @@
+[0.010s] Invoking command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24
+[0.042s] [35m[1mScanning dependencies of target potential_field_node[0m
+[0.060s] [ 50%] [32mBuilding CXX object CMakeFiles/potential_field_node.dir/src/potentialF.cpp.o[0m
+[0.835s] [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:[m[K In member function ‘[01m[Kgeometry_msgs::msg::PoseStamped PotentialField::PublishVector(float, float)[m[K’:
+[0.835s] [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:92:15:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kangle[m[K’ [[01;35m[K-Wunused-variable[m[K]
+[0.835s]    92 |         float [01;35m[Kangle[m[K = atan(y/x) + PI;
+[0.835s]       |               [01;35m[K^~~~~[m[K
+[0.835s] [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:96:15:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kangle[m[K’ [[01;35m[K-Wunused-variable[m[K]
+[0.835s]    96 |         float [01;35m[Kangle[m[K = atan(y/x);
+[0.835s]       |               [01;35m[K^~~~~[m[K
+[0.836s] [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:102:20:[m[K [01;31m[Kerror: [m[K‘[01m[Kangle[m[K’ was not declared in this scope; did you mean ‘[01m[Ktf2::angle[m[K’?
+[0.836s]   102 |       q.setRPY(0,0,[01;31m[Kangle[m[K);
+[0.836s]       |                    [01;31m[K^~~~~[m[K
+[0.836s]       |                    [32m[Ktf2::angle[m[K
+[0.836s] In file included from [01m[K/opt/ros/foxy/include/tf2_geometry_msgs/tf2_geometry_msgs.h:36[m[K,
+[0.836s]                  from [01m[K/home/tim/DREAM/ros2_ws/src/potential_field/src/potentialF.cpp:3[m[K:
+[0.836s] [01m[K/opt/ros/foxy/include/tf2/LinearMath/Quaternion.h:410:1:[m[K [01;36m[Knote: [m[K‘[01m[Ktf2::angle[m[K’ declared here
+[0.836s]   410 | [01;36m[Kangle[m[K(const Quaternion& q1, const Quaternion& q2)
+[0.836s]       | [01;36m[K^~~~~[m[K
+[2.286s] make[2]: *** [CMakeFiles/potential_field_node.dir/build.make:63: CMakeFiles/potential_field_node.dir/src/potentialF.cpp.o] Error 1
+[2.287s] make[1]: *** [CMakeFiles/Makefile2:78: CMakeFiles/potential_field_node.dir/all] Error 2
+[2.287s] make: *** [Makefile:141: all] Error 2
+[2.290s] Invoked command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24

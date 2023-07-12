@@ -1,0 +1,2 @@
+Invoking command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24
+Invoked command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24

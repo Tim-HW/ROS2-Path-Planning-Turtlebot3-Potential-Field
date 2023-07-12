@@ -1,0 +1,4 @@
+source;share/potential_field/local_setup.bash
+source;share/potential_field/local_setup.dsv
+source;share/potential_field/local_setup.sh
+source;share/potential_field/local_setup.zsh

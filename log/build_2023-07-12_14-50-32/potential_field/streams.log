@@ -1,0 +1,28 @@
+[0.013s] Invoking command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24
+[0.039s] [35m[1mScanning dependencies of target potential_field_node[0m
+[0.118s] [ 50%] [32mBuilding CXX object CMakeFiles/potential_field_node.dir/src/potentialF.cpp.o[0m
+[3.913s] [100%] [32m[1mLinking CXX executable potential_field_node[0m
+[4.091s] [100%] Built target potential_field_node
+[4.099s] Invoked command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24
+[4.120s] Invoking command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --install /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field
+[4.126s] -- Install configuration: ""
+[4.126s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib/potential_field/potential_field_node
+[4.128s] -- Set runtime path of "/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib/potential_field/potential_field_node" to ""
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field//launch
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field//launch/potential_field.launch.py
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/ament_index/resource_index/package_run_dependencies/potential_field
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/ament_index/resource_index/parent_prefix_path/potential_field
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/environment/ament_prefix_path.sh
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/environment/ament_prefix_path.dsv
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/environment/path.sh
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/environment/path.dsv
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/local_setup.bash
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/local_setup.sh
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/local_setup.zsh
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/local_setup.dsv
+[4.128s] -- Installing: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.dsv
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/ament_index/resource_index/packages/potential_field
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/cmake/potential_fieldConfig.cmake
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/cmake/potential_fieldConfig-version.cmake
+[4.128s] -- Up-to-date: /home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.xml
+[4.130s] Invoked command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --install /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field

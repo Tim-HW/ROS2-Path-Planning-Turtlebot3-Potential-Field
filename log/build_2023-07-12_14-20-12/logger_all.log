@@ -1,0 +1,105 @@
+[0.187s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.187s] DEBUG:colcon:Parsed command line arguments: Namespace(allow_overriding=[], ament_cmake_args=None, base_paths=['.'], build_base='build', catkin_cmake_args=None, catkin_skip_building_tests=False, cmake_args=None, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, cmake_target=None, cmake_target_skip_unavailable=False, continue_on_error=False, event_handlers=None, executor='parallel', ignore_user_meta=False, install_base='install', log_base=None, log_level=None, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7fc3d95bf1f0>>, merge_install=False, metas=['./colcon.meta'], packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=None, packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, packages_up_to_regex=None, parallel_workers=24, paths=None, symlink_install=False, test_result_base=None, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7fc3d95bf1f0>, verb_name='build', verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7fc3d95bf730>)
+[0.212s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.212s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.212s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.212s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.212s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.212s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.212s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/tim/DREAM/ros2_ws/src/potential_field'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.220s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_cmake' and name 'potential_field'
+[0.220s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.220s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.220s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.220s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.220s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.233s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.233s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.235s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /home/tim/DREAM/ros2_ws/src/potential_field/install
+[0.236s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 16 installed packages in /home/tim/DREAM/ros2_ws/install
+[0.237s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 421 installed packages in /opt/ros/foxy
+[0.238s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.284s] Level 5:colcon.colcon_core.verb:set package 'potential_field' build argument 'cmake_args' from command line to 'None'
+[0.284s] Level 5:colcon.colcon_core.verb:set package 'potential_field' build argument 'cmake_target' from command line to 'None'
+[0.284s] Level 5:colcon.colcon_core.verb:set package 'potential_field' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.284s] Level 5:colcon.colcon_core.verb:set package 'potential_field' build argument 'cmake_clean_cache' from command line to 'False'
+[0.284s] Level 5:colcon.colcon_core.verb:set package 'potential_field' build argument 'cmake_clean_first' from command line to 'False'
+[0.284s] Level 5:colcon.colcon_core.verb:set package 'potential_field' build argument 'cmake_force_configure' from command line to 'False'
+[0.284s] Level 5:colcon.colcon_core.verb:set package 'potential_field' build argument 'ament_cmake_args' from command line to 'None'
+[0.284s] Level 5:colcon.colcon_core.verb:set package 'potential_field' build argument 'catkin_cmake_args' from command line to 'None'
+[0.284s] Level 5:colcon.colcon_core.verb:set package 'potential_field' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.284s] DEBUG:colcon.colcon_core.verb:Building package 'potential_field' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field', 'merge_install': False, 'path': '/home/tim/DREAM/ros2_ws/src/potential_field', 'symlink_install': False, 'test_result_base': None}
+[0.284s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.286s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.286s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/tim/DREAM/ros2_ws/src/potential_field' with build type 'ament_cmake'
+[0.286s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/tim/DREAM/ros2_ws/src/potential_field'
+[0.291s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.291s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.291s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.301s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24
+[4.907s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --build /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field -- -j24 -l24
+[4.937s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --install /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field
+[4.951s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(potential_field)
+[4.952s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(ros_foxy) /usr/bin/cmake --install /home/tim/DREAM/ros2_ws/src/potential_field/build/potential_field
+[4.961s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field' for CMake module files
+[4.962s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field' for CMake config files
+[4.963s] Level 1:colcon.colcon_core.shell:create_environment_hook('potential_field', 'cmake_prefix_path')
+[4.965s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/hook/cmake_prefix_path.ps1'
+[4.965s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/hook/cmake_prefix_path.dsv'
+[4.966s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/hook/cmake_prefix_path.sh'
+[4.967s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib'
+[4.967s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/bin'
+[4.967s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib/pkgconfig/potential_field.pc'
+[4.967s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib/python3.8/site-packages'
+[4.968s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/bin'
+[4.969s] INFO:colcon.colcon_core.shell:Creating package script '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.ps1'
+[4.970s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.dsv'
+[4.970s] INFO:colcon.colcon_core.shell:Creating package script '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.sh'
+[4.971s] INFO:colcon.colcon_core.shell:Creating package script '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.bash'
+[4.972s] INFO:colcon.colcon_core.shell:Creating package script '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.zsh'
+[4.972s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/colcon-core/packages/potential_field)
+[4.992s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(potential_field)
+[4.995s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field' for CMake module files
+[4.996s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field' for CMake config files
+[4.996s] Level 1:colcon.colcon_core.shell:create_environment_hook('potential_field', 'cmake_prefix_path')
+[4.998s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/hook/cmake_prefix_path.ps1'
+[4.999s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/hook/cmake_prefix_path.dsv'
+[4.999s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/hook/cmake_prefix_path.sh'
+[5.000s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib'
+[5.000s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/bin'
+[5.000s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib/pkgconfig/potential_field.pc'
+[5.000s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/lib/python3.8/site-packages'
+[5.000s] Level 1:colcon.colcon_core.environment:checking '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/bin'
+[5.002s] INFO:colcon.colcon_core.shell:Creating package script '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.ps1'
+[5.002s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.dsv'
+[5.002s] INFO:colcon.colcon_core.shell:Creating package script '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.sh'
+[5.003s] INFO:colcon.colcon_core.shell:Creating package script '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.bash'
+[5.003s] INFO:colcon.colcon_core.shell:Creating package script '/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/potential_field/package.zsh'
+[5.004s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/tim/DREAM/ros2_ws/src/potential_field/install/potential_field/share/colcon-core/packages/potential_field)
+[5.004s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[5.004s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[5.004s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[5.004s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[5.008s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[5.008s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[5.009s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[5.030s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[5.032s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/tim/DREAM/ros2_ws/src/potential_field/install/local_setup.ps1'
+[5.033s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/tim/DREAM/ros2_ws/src/potential_field/install/_local_setup_util_ps1.py'
+[5.034s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/tim/DREAM/ros2_ws/src/potential_field/install/setup.ps1'
+[5.036s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/tim/DREAM/ros2_ws/src/potential_field/install/local_setup.sh'
+[5.036s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/tim/DREAM/ros2_ws/src/potential_field/install/_local_setup_util_sh.py'
+[5.037s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/tim/DREAM/ros2_ws/src/potential_field/install/setup.sh'
+[5.039s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/tim/DREAM/ros2_ws/src/potential_field/install/local_setup.bash'
+[5.039s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/tim/DREAM/ros2_ws/src/potential_field/install/setup.bash'
+[5.041s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/tim/DREAM/ros2_ws/src/potential_field/install/local_setup.zsh'
+[5.042s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/tim/DREAM/ros2_ws/src/potential_field/install/setup.zsh'
