@@ -31,17 +31,27 @@ class PotentialField : public rclcpp::Node
       cmd_pub  = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel",1);
       // Create Publihser of the attraction vector
       att_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("attraction_vector",1);
-      // Create Publihser of the attraction vector
+      // Create Publihser of the Replusion vector
       rep_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("repulsion_vector",1);
+      // Create Publihser of the Final vector
+      fin_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("Final_Vector",1);
       
     }
 
-    void controller()
+    int controller()
     {
+
 
       double x_final = V_attraction[0] + V_repulsion[0];
       double y_final = V_attraction[1] + V_repulsion[1];
 
+      geometry_msgs::msg::PoseStamped finalvector = PublishVector(x_final,y_final);
+      fin_pub->publish(finalvector);
+        
+
+      return 0;
+
+      /*
       geometry_msgs::msg::Twist direction;
 
       double tolerance = 0.1 ;
@@ -67,12 +77,11 @@ class PotentialField : public rclcpp::Node
       
       }
 
-      cmd_pub->publish(direction);
-            
+      //cmd_pub->publish(direction);
+      */      
     }
 
     geometry_msgs::msg::PoseStamped PublishVector(float x, float y)
-
     {
 
       // Create the attraction vector to show in RVIZ
@@ -83,14 +92,14 @@ class PotentialField : public rclcpp::Node
       // Set the time stamp (current time)
       vector.header.stamp = this->get_clock()->now();
       // set the position (it's always (0,0,0) as the reference frame is odom)
-      vector.pose.position.x = 0 ;
-      vector.pose.position.y = 0 ;
+      vector.pose.position.x = x_odom ;
+      vector.pose.position.y = y_odom ;
       vector.pose.position.z = 0 ;
       // Compute the theta angle
       float angle;
       if (x < 0)
       {
-        angle = atan(y/x) + PI;
+        angle = PI + atan(y/x);
       }
       else
       {
@@ -109,7 +118,7 @@ class PotentialField : public rclcpp::Node
 
     }
 
-    void ComputeAttraction(float x_a, float y_a, float x_odom, float y_odom)
+    void ComputeAttraction(float x_a, float y_a)
     {
       
       // Compute distance between the attraction and the current position
@@ -118,7 +127,7 @@ class PotentialField : public rclcpp::Node
       x_a = x_a - x_odom;
       y_a = y_a - y_odom;
             // Create the Module of the force to simulate
-      F_attraction = (Q_repulsion * Q_attraction )/(4 * PI * pow(distance,2));
+      F_attraction = (Q_attraction )/(4 * PI * pow(distance,2));
       // Create the position of the force to simulate
       V_attraction = {F_attraction * x_a , F_attraction * y_a};
 
@@ -140,31 +149,31 @@ class PotentialField : public rclcpp::Node
 
     void odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg)
     {
-        // set current x position
-        x     = msg->pose.pose.position.x;
-        // set current y position
-        y     = msg->pose.pose.position.y;
+      // set current x position
+      x_odom = msg->pose.pose.position.x;
+      // set current y position
+      y_odom = msg->pose.pose.position.y;
 
-        // Retrive the rotations using quaterions
-        tf2::Quaternion q(
-                msg->pose.pose.orientation.x,
-                msg->pose.pose.orientation.y,
-                msg->pose.pose.orientation.z,
-                msg->pose.pose.orientation.w);
-        // Convert it into matrice of 3x3
-        tf2::Matrix3x3 m(q);
-        // Init angle variables
-        double roll, pitch, yaw;
-        // Transform quaterion into Euler
-        m.getRPY(roll, pitch, yaw);
-        // Define theta = yaw
-        theta = yaw;
+      // Retrive the rotations using quaterions
+      tf2::Quaternion q(
+              msg->pose.pose.orientation.x,
+              msg->pose.pose.orientation.y,
+              msg->pose.pose.orientation.z,
+              msg->pose.pose.orientation.w);
+      // Convert it into matrice of 3x3
+      tf2::Matrix3x3 m(q);
+      // Init angle variables
+      double roll, pitch, yaw;
+      // Transform quaterion into Euler
+      m.getRPY(roll, pitch, yaw);
+      // Define theta = yaw
+      theta = yaw;
 
-        //RCLCPP_INFO(this->get_logger(), "Odometry : x = %f | y = %f | theta = %f" , x , y, theta);
+      //RCLCPP_INFO(this->get_logger(), "Odometry : x = %f | y = %f | theta = %f" , x , y, theta);
 
-        ComputeAttraction(3,0,x,y);
+      ComputeAttraction(0,4);
 
-        //controller();
+        
     }
     void scan_callback(sensor_msgs::msg::LaserScan::SharedPtr _msg)
     {
@@ -187,7 +196,7 @@ class PotentialField : public rclcpp::Node
         if(scan[i] < 100 and scan[i] > 0.1)
         {
           //RCLCPP_INFO(this->get_logger(), "Scan n: %d | value: %f",i,scan[i]);
-          float Current_Q = (Q_attraction * Q_repulsion) / (4 * PI * pow(scan[i],2));
+          float Current_Q = (Q_repulsion) / (4 * PI * pow(scan[i],2));
           // Projection of the vectors in the x , y coordinates
           x_r -= Current_Q * cos(angle_min+step*i);
           y_r -= Current_Q * sin(angle_min+step*i);
@@ -208,20 +217,20 @@ class PotentialField : public rclcpp::Node
       {
         
         //RCLCPP_INFO(this->get_logger(), "x: %f | y: %f",x_r,y_r);
-      
 
         V_repulsion = {x_r, y_r};
 
         
       }
 
-      RCLCPP_INFO(this->get_logger(), "\n angle repulsion : %f  °",atan(V_repulsion[1]/V_repulsion[0])*180/PI);
+      RCLCPP_INFO(this->get_logger(), "\n angle repulsion : %f°",atan(V_repulsion[1]/V_repulsion[0])*180/PI);
 
 
       // Create the vector for Rviz
       geometry_msgs::msg::PoseStamped repulsion = PublishVector(V_repulsion[0],V_repulsion[1]);
       // Publish the vector
       rep_pub->publish(repulsion);
+      controller();
 
 
     }
@@ -235,16 +244,18 @@ class PotentialField : public rclcpp::Node
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr  att_pub;
     // repulsion vector publisher variable declaration
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr  rep_pub;
+    // repulsion vector publisher variable declaration
+    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr  fin_pub;
     // Declare position
 
-    double x;
-    double y;
+    double x_odom;
+    double y_odom;
     double theta;
 
     // declare attraction vector
     float F_attraction;
   
-    int Q_attraction = 50;
+    int Q_attraction = 100;
     std::vector<float> V_attraction ;
 
     int Q_repulsion = 1;

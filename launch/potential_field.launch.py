@@ -9,12 +9,17 @@ import os
 def generate_launch_description():
     return LaunchDescription([
 
-        Node(package='potential_field',
-        executable='potential_field_node',#same as Cmakelist
-        output='screen'),
+        #Node(package='potential_field',
+        #executable='potential_field_node',#same as Cmakelist
+        #output='screen'),
         #Node(
-        #    package='turtlebot3_gazebo',
-        #    executable='turtlebot3_dqn_stage3.launch.py',
-        #),
+        #package='turtlesim',
+        #namespace='turtlesim2',
+        #executable='turtlesim_node',
+        #name='sim'),
+        Node(
+            package='turtlebot3_gazebo',
+            executable='turtlebot3_drive',
+        ),
 
     ])
