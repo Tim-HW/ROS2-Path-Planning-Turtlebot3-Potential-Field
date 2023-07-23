@@ -4,6 +4,15 @@ This package is an excuse to learn C++ and ROS2. It's not complete nor plug and 
 
 ![alt text](https://github.com/Tim-HW/ROS2-PotentialField/blob/main/potentialfiled-turtlebot3.jpg)
 
+## Installation
+
+```bash
+cd ros_ws/src
+git clone https://github.com/Tim-HW/ROS2-PotentialField.git
+cd ..
+colcon build
+```
+
 ## Potential Field paradigm
 The potential field method is a widely used technique in robotics and motion planning to guide a robot towards a desired goal while avoiding obstacles in its environment. The method operates based on the concept of potential fields, where each point in the robot's environment is assigned a "potential" value.
 
