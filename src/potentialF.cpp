@@ -35,7 +35,6 @@ class PotentialField : public rclcpp::Node
       rep_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("repulsion_vector",1);
       // Create Publihser of the Final vector
       fin_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("Final_Vector",1);
-      
     }
 
     int controller()
@@ -46,39 +45,55 @@ class PotentialField : public rclcpp::Node
       double y_final = V_attraction[1] + V_repulsion[1];
 
       geometry_msgs::msg::PoseStamped finalvector = PublishVector(x_final,y_final);
+      
       fin_pub->publish(finalvector);
-        
 
-      return 0;
-
-      /*
       geometry_msgs::msg::Twist direction;
 
-      double tolerance = 0.1 ;
+      double tolerance = 0.2 ;
       double angle = atan(y_final/x_final);
-      theta = atan(y/x);
-      if(angle < theta - tolerance)
+      double delta;
+
+      if (x_final < 0)
+      {
+        angle = PI + atan(y_final/x_final);
+      }
+      else
+      {
+        angle = atan(y_final/x_final);
+      }
+      
+
+
+      delta = PI - fabs(fmod(fabs(angle - theta), 2*PI) - PI);
+
+      RCLCPP_INFO(this->get_logger(), "angle to goal: %f", delta);
+ 
+
+      
+      if(delta < theta - tolerance)
       {
         direction.angular.z = -0.1;
         direction.linear.x  = 0;
         // v angle +
       }
-      else if(angle > theta + tolerance)
+      else if(delta > theta + tolerance)
       {
         // v angle -
-        direction.angular.z = 0.1;
+        direction.angular.z = 0.2;
         direction.linear.x  = 0;
       }
       else
       {
         // v forward +
-        direction.linear.x  = 0.1;
+        direction.linear.x  = 0.2;
         direction.angular.z = 0;
       
       }
 
-      //cmd_pub->publish(direction);
-      */      
+      cmd_pub->publish(direction);
+      return 0;
+ 
     }
 
     geometry_msgs::msg::PoseStamped PublishVector(float x, float y)
@@ -171,13 +186,10 @@ class PotentialField : public rclcpp::Node
 
       //RCLCPP_INFO(this->get_logger(), "Odometry : x = %f | y = %f | theta = %f" , x , y, theta);
 
-      ComputeAttraction(0,4);
-
-        
+      ComputeAttraction(-2,-2);        
     }
     void scan_callback(sensor_msgs::msg::LaserScan::SharedPtr _msg)
     {
-
       float angle_min = _msg->angle_min;
       //float angle_max = _msg->angle_max;
       float step      = _msg->angle_increment; 
@@ -200,7 +212,6 @@ class PotentialField : public rclcpp::Node
           // Projection of the vectors in the x , y coordinates
           x_r -= Current_Q * cos(angle_min+step*i);
           y_r -= Current_Q * sin(angle_min+step*i);
-          
         }
         else
         {
@@ -215,12 +226,8 @@ class PotentialField : public rclcpp::Node
       }
       else
       {
-        
         //RCLCPP_INFO(this->get_logger(), "x: %f | y: %f",x_r,y_r);
-
         V_repulsion = {x_r, y_r};
-
-        
       }
 
       RCLCPP_INFO(this->get_logger(), "\n angle repulsion : %f°",atan(V_repulsion[1]/V_repulsion[0])*180/PI);
@@ -230,14 +237,15 @@ class PotentialField : public rclcpp::Node
       geometry_msgs::msg::PoseStamped repulsion = PublishVector(V_repulsion[0],V_repulsion[1]);
       // Publish the vector
       rep_pub->publish(repulsion);
+      // Controller
       controller();
 
 
     }
     // odom subsriber variable declaration
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr      sub_odom;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr       sub_odom;
     // scan subsriber variable declaration
-    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr  sub_scan;
+    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr   sub_scan;
     // robot control publisher variable declaration
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr        cmd_pub;
     // attraction vector publisher variable declaration
