@@ -1,4 +1,4 @@
-# ROS2-PotentialField
+# ROS2-Turtlebot3 Path Planning
 ROS2 Package for turtlebot3 to execute local path planning using the potential field methods.
 This package is an excuse to learn C++ and ROS2. Feel free to use it as you want :D
 
