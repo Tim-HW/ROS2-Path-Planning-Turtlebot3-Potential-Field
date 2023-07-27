@@ -11,6 +11,8 @@ cd ros_ws/src
 git clone https://github.com/Tim-HW/ROS2-PotentialField.git
 cd ..
 colcon build
+source install/setup.bash
+ros2 run potential_field potential_field_node
 ```
 
 ## Potential Field paradigm
