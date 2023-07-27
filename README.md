@@ -1,6 +1,6 @@
 # ROS2-PotentialField
 ROS2 Package for turtlebot3 to execute local path planning using the potential field methods.
-This package is an excuse to learn C++ and ROS2. It's not complete nor plug and play for now but feel free to use it as you want :D
+This package is an excuse to learn C++ and ROS2. It's not complete nor plug and play for now, but feel free to use it as you want :D
 
 ![alt text](https://github.com/Tim-HW/ROS2-PotentialField/blob/main/images/potentialfiled-turtlebot3.jpg)
 
@@ -11,6 +11,8 @@ cd ros_ws/src
 git clone https://github.com/Tim-HW/ROS2-PotentialField.git
 cd ..
 colcon build
+source install/setup.bash
+ros2 run potential_field potential_field_node
 ```
 
 ## Potential Field paradigm
