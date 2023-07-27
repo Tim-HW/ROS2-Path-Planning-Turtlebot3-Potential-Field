@@ -6,21 +6,19 @@
 #include "tf2/transform_datatypes.h"
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2/LinearMath/Matrix3x3.h"
+#include <cstdlib>
 #include <cmath>
 #include <iostream>
 #include <memory>
 
 #define PI 3.14159265
-#define x_goal 6
-#define y_goal 6
-
 
 using std::placeholders::_1;
 
 class PotentialField : public rclcpp::Node
 {
   public:
-    PotentialField()
+    PotentialField(float x_goal, float y_goal)
     : Node("potential_field_node")
 
     {
@@ -37,6 +35,9 @@ class PotentialField : public rclcpp::Node
       rep_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("repulsion_vector",1);
       // Create Publihser of the Final vector
       fin_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("Final_Vector",1);
+
+      goal = {x_goal, y_goal};
+
     }
 
     int controller()
@@ -137,14 +138,16 @@ class PotentialField : public rclcpp::Node
 
     void ComputeAttraction(float x_a, float y_a)
     {
-      
+      RCLCPP_INFO(this->get_logger(), "GOAL | x : %f | y : %f",x_a,y_a);
       // Compute distance between the attraction and the current position
       float distance =  sqrt(pow(x_a - x_odom,2) + pow(y_a - y_odom,2));
       // Compute the point to reach relative to the current position
       x_a = x_a - x_odom;
       y_a = y_a - y_odom;
+
+      int Q_attraction = 100;
             // Create the Module of the force to simulate
-      F_attraction = (Q_attraction )/(4 * PI * pow(distance,2));
+      float F_attraction = (Q_attraction )/(4 * PI * pow(distance,2));
       // Create the position of the force to simulate
       V_attraction = {F_attraction * x_a , F_attraction * y_a};
 
@@ -188,7 +191,7 @@ class PotentialField : public rclcpp::Node
 
       //RCLCPP_INFO(this->get_logger(), "Odometry : x = %f | y = %f | theta = %f" , x , y, theta);
 
-      ComputeAttraction(x_goal,y_goal);        
+      ComputeAttraction(goal[0],goal[1]);        
     }
     void scan_callback(sensor_msgs::msg::LaserScan::SharedPtr _msg)
     {
@@ -208,7 +211,8 @@ class PotentialField : public rclcpp::Node
       {
         // If the value of the scan is < 100m it's not tacking into account
         if(scan[i] < 100 and scan[i] > 0.1)
-        {
+        { 
+          int Q_repulsion = 1;
           //RCLCPP_INFO(this->get_logger(), "Scan n: %d | value: %f",i,scan[i]);
           float Current_Q = (Q_repulsion) / (4 * PI * pow(scan[i],2));
           // Projection of the vectors in the x , y coordinates
@@ -232,7 +236,7 @@ class PotentialField : public rclcpp::Node
         V_repulsion = {x_r, y_r};
       }
 
-      RCLCPP_INFO(this->get_logger(), "\n angle repulsion : %f°",atan(V_repulsion[1]/V_repulsion[0])*180/PI);
+      //RCLCPP_INFO(this->get_logger(), "\n angle repulsion : %f°",atan(V_repulsion[1]/V_repulsion[0])*180/PI);
 
 
       // Create the vector for Rviz
@@ -258,26 +262,38 @@ class PotentialField : public rclcpp::Node
     rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr  fin_pub;
     // Declare position
 
+
+    // x position of odometry
     double x_odom;
+    // y position of odoemtry
     double y_odom;
+    // Angle of the robot
     double theta;
-
-    // declare attraction vector
-    float F_attraction;
-  
-    int Q_attraction = 100;
+    // Attraction vector
     std::vector<float> V_attraction ;
-
-    int Q_repulsion = 1;
+    // Replusion vector
     std::vector<float> V_repulsion ;
+    //
+    std::vector<float> goal;
+
 };
 
 int main(int argc, char * argv[])
 {
+
+    printf("You have entered %d arguments:\n", argc);
+ 
+    for (int i = 0; i < argc; i++) {
+        printf("%s\n", argv[i]);
+    }
+  int x = atoi(argv[0]);
+  int y = atoi(argv[1]);
+  
   // init node
   rclcpp::init(argc, argv);
   // init class
-  rclcpp::spin(std::make_shared<PotentialField>());
+  auto node = std::make_shared<PotentialField>(x,y);
+  rclcpp::spin(node);
   // shutdown once finished
   rclcpp::shutdown();
   // end
