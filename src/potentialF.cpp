@@ -11,6 +11,8 @@
 #include <memory>
 
 #define PI 3.14159265
+#define x_goal 6
+#define y_goal 6
 
 
 using std::placeholders::_1;
@@ -71,13 +73,13 @@ class PotentialField : public rclcpp::Node
  
 
       
-      if(delta < theta - tolerance)
+      if(delta < 0 - tolerance)
       {
-        direction.angular.z = -0.1;
+        direction.angular.z = -0.2;
         direction.linear.x  = 0;
         // v angle +
       }
-      else if(delta > theta + tolerance)
+      else if(delta > 0 + tolerance)
       {
         // v angle -
         direction.angular.z = 0.2;
@@ -86,7 +88,7 @@ class PotentialField : public rclcpp::Node
       else
       {
         // v forward +
-        direction.linear.x  = 0.2;
+        direction.linear.x  = 0.1;
         direction.angular.z = 0;
       
       }
@@ -186,7 +188,7 @@ class PotentialField : public rclcpp::Node
 
       //RCLCPP_INFO(this->get_logger(), "Odometry : x = %f | y = %f | theta = %f" , x , y, theta);
 
-      ComputeAttraction(-2,-2);        
+      ComputeAttraction(x_goal,y_goal);        
     }
     void scan_callback(sensor_msgs::msg::LaserScan::SharedPtr _msg)
     {
@@ -210,8 +212,8 @@ class PotentialField : public rclcpp::Node
           //RCLCPP_INFO(this->get_logger(), "Scan n: %d | value: %f",i,scan[i]);
           float Current_Q = (Q_repulsion) / (4 * PI * pow(scan[i],2));
           // Projection of the vectors in the x , y coordinates
-          x_r -= Current_Q * cos(angle_min+step*i);
-          y_r -= Current_Q * sin(angle_min+step*i);
+          x_r -= Current_Q * cos(angle_min+theta+step*i);
+          y_r -= Current_Q * sin(angle_min+theta+step*i);
         }
         else
         {
