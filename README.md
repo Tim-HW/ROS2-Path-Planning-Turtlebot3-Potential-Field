@@ -5,6 +5,7 @@ This package is an excuse to learn C++ and ROS2. Feel free to use it as you want
 
 <a href="https://github.com/PRBonn/kiss-icp/blob/main/LICENSE"><img src="https://img.shields.io/github/license/PRBonn/kiss-icp" /></a>
 <a href="https://github.com/PRBonn/kiss-icp/blob/main/"><img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" /></a>
+<a href="https://github.com/PRBonn/kiss-icp/blob/main/"><img src="https://img.shields.io/badge/ROS2-Foxy-blue" /></a>
 
 
 ![alt text](https://github.com/Tim-HW/ROS2-PotentialField/blob/main/images/potentialfiled-turtlebot3.jpg)
