@@ -18,7 +18,7 @@ using std::placeholders::_1;
 class PotentialField : public rclcpp::Node
 {
   public:
-    PotentialField(float x_goal, float y_goal)
+    PotentialField(char* x_goal, char* y_goal)
     : Node("potential_field_node")
 
     {
@@ -36,7 +36,11 @@ class PotentialField : public rclcpp::Node
       // Create Publihser of the Final vector
       fin_pub  = this->create_publisher<geometry_msgs::msg::PoseStamped>("Final_Vector",1);
 
-      goal = {x_goal, y_goal};
+      RCLCPP_INFO(this->get_logger(), "x = %s and y = %s", x_goal,y_goal);
+
+      goal_x = atof(x_goal);
+      goal_y = atof(y_goal);
+
 
     }
 
@@ -191,8 +195,11 @@ class PotentialField : public rclcpp::Node
 
       //RCLCPP_INFO(this->get_logger(), "Odometry : x = %f | y = %f | theta = %f" , x , y, theta);
 
-      ComputeAttraction(goal[0],goal[1]);        
+      ComputeAttraction(goal_x,goal_y);  
+
     }
+
+
     void scan_callback(sensor_msgs::msg::LaserScan::SharedPtr _msg)
     {
       float angle_min = _msg->angle_min;
@@ -274,25 +281,17 @@ class PotentialField : public rclcpp::Node
     // Replusion vector
     std::vector<float> V_repulsion ;
     //
-    std::vector<float> goal;
+    float goal_x = 0;
+    float goal_y = 0;
 
 };
 
 int main(int argc, char * argv[])
-{
-
-    printf("You have entered %d arguments:\n", argc);
- 
-    for (int i = 0; i < argc; i++) {
-        printf("%s\n", argv[i]);
-    }
-  int x = atoi(argv[0]);
-  int y = atoi(argv[1]);
-  
+{  
   // init node
   rclcpp::init(argc, argv);
   // init class
-  auto node = std::make_shared<PotentialField>(x,y);
+  auto node = std::make_shared<PotentialField>(argv[1],argv[2]);
   rclcpp::spin(node);
   // shutdown once finished
   rclcpp::shutdown();
