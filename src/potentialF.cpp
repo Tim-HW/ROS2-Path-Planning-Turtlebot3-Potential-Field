@@ -1,6 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "nav_msgs/msg/odometry.hpp"
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "tf2/transform_datatypes.h"
@@ -46,62 +46,72 @@ class PotentialField : public rclcpp::Node
 
     int controller()
     {
+        // Initialize the command message
+        geometry_msgs::msg::Twist direction;
 
+        // Parameters
+        const double goal_tolerance = 0.1;     // Meters
+        const double tolerance = 0.2;         // Radians
+        const double rotation_gain = 1.0;     // Gain for angular speed adjustment
+        const double max_rotation_speed = 0.5; // Max angular speed (radians/sec)
+        const double forward_speed = 0.1;     // Linear speed (meters/sec)
 
-      double x_final = V_attraction[0] + V_repulsion[0];
-      double y_final = V_attraction[1] + V_repulsion[1];
+        // Calculate final vector components
+        double x_final = V_attraction[0] + V_repulsion[0];
+        double y_final = V_attraction[1] + V_repulsion[1];
 
-      geometry_msgs::msg::PoseStamped finalvector = PublishVector(x_final,y_final);
-      
-      fin_pub->publish(finalvector);
+        // Check if the robot arrived at the destination
+        double distance = std::sqrt(x_final * x_final + y_final * y_final);
+        if (distance < goal_tolerance) {
+            direction.linear.x = 0.0;
+            direction.angular.z = 0.0;
+            RCLCPP_INFO(this->get_logger(), "Target reached!");
+            cmd_pub->publish(direction);
+            return 0;
+        }
 
-      geometry_msgs::msg::Twist direction;
+        // Publish the final vector (for visualization/debugging)
+        geometry_msgs::msg::PoseStamped finalvector = PublishVector(x_final, y_final);
+        fin_pub->publish(finalvector);
 
-      double tolerance = 0.2 ;
-      double angle = atan(y_final/x_final);
-      double delta;
+        // Calculate target angle using atan2 (handles all quadrants correctly)
+        double angle = atan2(y_final, x_final);
 
-      if (x_final < 0)
-      {
-        angle = PI + atan(y_final/x_final);
-      }
-      else
-      {
-        angle = atan(y_final/x_final);
-      }
-      
+        // Calculate the shortest angular difference (delta)
+        double delta = normalize_angle(angle - theta);
 
+        RCLCPP_INFO(this->get_logger(), "Angle to goal: %f", delta);
 
-      delta = PI - fabs(fmod(fabs(angle - theta), 2*PI) - PI);
+        // Control logic
+        if (delta < -tolerance) {
+            // Rotate clockwise to reduce delta
+            direction.angular.z = -std::clamp(delta * rotation_gain, -max_rotation_speed, max_rotation_speed);
+            direction.linear.x = 0.0;
+        } 
+        else if (delta > tolerance) {
+            // Rotate counterclockwise to reduce delta
+            direction.angular.z = std::clamp(delta * rotation_gain, -max_rotation_speed, max_rotation_speed);
+            direction.linear.x = 0.0;
+        } 
+        else {
+            // Move forward when aligned within tolerance
+            direction.linear.x = forward_speed;
+            direction.angular.z = 0.0;
+        }
 
-      RCLCPP_INFO(this->get_logger(), "angle to goal: %f", delta);
- 
+        // Publish the command
+        cmd_pub->publish(direction);
 
-      
-      if(delta < 0 - tolerance)
-      {
-        direction.angular.z = -0.2;
-        direction.linear.x  = 0;
-        // v angle +
-      }
-      else if(delta > 0 + tolerance)
-      {
-        // v angle -
-        direction.angular.z = 0.2;
-        direction.linear.x  = 0;
-      }
-      else
-      {
-        // v forward +
-        direction.linear.x  = 0.1;
-        direction.angular.z = 0;
-      
-      }
-
-      cmd_pub->publish(direction);
-      return 0;
- 
+        return 0;
     }
+
+    // Helper function to normalize angle to [-PI, PI]
+    double normalize_angle(double angle) {
+        while (angle > M_PI) angle -= 2 * M_PI;
+        while (angle < -M_PI) angle += 2 * M_PI;
+        return angle;
+    }
+
 
     geometry_msgs::msg::PoseStamped PublishVector(float x, float y)
     {
@@ -140,121 +150,135 @@ class PotentialField : public rclcpp::Node
 
     }
 
-    void ComputeAttraction(float x_a, float y_a)
+    void ComputeAttraction(float x_goal, float y_goal)
     {
-      RCLCPP_INFO(this->get_logger(), "GOAL | x : %f | y : %f",x_a,y_a);
-      // Compute distance between the attraction and the current position
-      float distance =  sqrt(pow(x_a - x_odom,2) + pow(y_a - y_odom,2));
-      // Compute the point to reach relative to the current position
-      x_a = x_a - x_odom;
-      y_a = y_a - y_odom;
+        // Log the goal position
+        RCLCPP_INFO(this->get_logger(), "GOAL | x: %f | y: %f", x_goal, y_goal);
 
-      int Q_attraction = 100;
-            // Create the Module of the force to simulate
-      float F_attraction = (Q_attraction )/(4 * PI * pow(distance,2));
-      // Create the position of the force to simulate
-      V_attraction = {F_attraction * x_a , F_attraction * y_a};
+        // Compute the relative position of the goal from the current position
+        float dx = x_goal - x_odom;
+        float dy = y_goal - y_odom;
 
-      
-      //RCLCPP_INFO(this->get_logger(), "x : %f | y : %f",x_a,y_a);
-      //RCLCPP_INFO(this->get_logger(), "Force: %f",F_attraction);
-      
+        // Compute the distance between the current position and the goal
+        float distance = std::sqrt(dx * dx + dy * dy);
 
-      //RCLCPP_INFO(this->get_logger(), "angle attraction :%f°",atan(V_attraction[1]/V_attraction[0])*180/PI);
-      //RCLCPP_INFO(this->get_logger(), "v_attraction is : x = %f ; y = %f",x,y);
+        // Handle edge case: Avoid division by zero or extremely large forces
+        if (distance < 1e-3) {
+            RCLCPP_WARN(this->get_logger(), "Goal is too close to the current position; force set to zero.");
+            V_attraction = {0.0f, 0.0f};
+            return;
+        }
 
-      geometry_msgs::msg::PoseStamped attraction = PublishVector(V_attraction[0],V_attraction[1]);
-      att_pub->publish(attraction);
+        // Define the strength of the attraction
+        const int Q_attraction = 100;
 
+        // Compute the magnitude of the attractive force
+        float F_attraction = Q_attraction / (4 * M_PI * distance * distance);
+
+        // Compute the attraction vector
+        V_attraction = {F_attraction * dx / distance, F_attraction * dy / distance};
+
+        // Log the computed attraction force
+        RCLCPP_INFO(this->get_logger(), "Attraction Force | x: %f | y: %f", V_attraction[0], V_attraction[1]);
+
+        // Visualize the attraction vector by publishing it
+        geometry_msgs::msg::PoseStamped attraction = PublishVector(V_attraction[0], V_attraction[1]);
+        att_pub->publish(attraction);
     }
+
     
 
   private:
 
     void odom_callback(const nav_msgs::msg::Odometry::SharedPtr msg)
     {
-      // set current x position
-      x_odom = msg->pose.pose.position.x;
-      // set current y position
-      y_odom = msg->pose.pose.position.y;
+        // Extract and set the current position from the Odometry message
+        x_odom = msg->pose.pose.position.x;
+        y_odom = msg->pose.pose.position.y;
 
-      // Retrive the rotations using quaterions
-      tf2::Quaternion q(
-              msg->pose.pose.orientation.x,
-              msg->pose.pose.orientation.y,
-              msg->pose.pose.orientation.z,
-              msg->pose.pose.orientation.w);
-      // Convert it into matrice of 3x3
-      tf2::Matrix3x3 m(q);
-      // Init angle variables
-      double roll, pitch, yaw;
-      // Transform quaterion into Euler
-      m.getRPY(roll, pitch, yaw);
-      // Define theta = yaw
-      theta = yaw;
+        // Retrieve orientation as a quaternion
+        const auto& orientation = msg->pose.pose.orientation;
+        tf2::Quaternion q(
+            orientation.x,
+            orientation.y,
+            orientation.z,
+            orientation.w
+        );
 
-      //RCLCPP_INFO(this->get_logger(), "Odometry : x = %f | y = %f | theta = %f" , x , y, theta);
+        // Convert quaternion to Euler angles (roll, pitch, yaw)
+        double roll, pitch, yaw;
+        tf2::Matrix3x3(q).getRPY(roll, pitch, yaw);
 
-      ComputeAttraction(goal_x,goal_y);  
+        // Set theta (yaw) as the robot's current heading
+        theta = yaw;
 
+        // Log current odometry data (uncomment for debugging)
+        // RCLCPP_INFO(this->get_logger(), "Odometry | x: %f | y: %f | theta: %f", x_odom, y_odom, theta);
+
+        // Compute the attraction vector based on the updated odometry
+        ComputeAttraction(goal_x, goal_y);
     }
 
-
-    void scan_callback(sensor_msgs::msg::LaserScan::SharedPtr _msg)
+    void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr _msg)
     {
-      float angle_min = _msg->angle_min;
-      //float angle_max = _msg->angle_max;
-      float step      = _msg->angle_increment; 
-      auto scan       = _msg->ranges;
-      auto len        = int(float(scan.size()));
+        // Extract scan parameters
+        float angle_min = _msg->angle_min;
+        float angle_increment = _msg->angle_increment;
+        const auto& scan = _msg->ranges;
+        size_t num_readings = scan.size();
 
-      int counter = 0;
+        // Initialize repulsion vector components
+        float x_r = 0.0f;
+        float y_r = 0.0f;
+        int valid_points = 0;
 
+        // Define constants
+        const float MIN_DISTANCE = 0.1f;  // Minimum valid distance
+        const float MAX_DISTANCE = 100.0f; // Maximum valid distance
+        const int Q_repulsion = 1;
 
-      float x_r = 0;
-      float y_r = 0;
+        // Process each laser scan reading
+        for (size_t i = 0; i < num_readings; ++i)
+        {
+            float distance = scan[i];
 
-      for(int i = 0 ; i < len ; i++)
-      {
-        // If the value of the scan is < 100m it's not tacking into account
-        if(scan[i] < 100 and scan[i] > 0.1)
-        { 
-          int Q_repulsion = 1;
-          //RCLCPP_INFO(this->get_logger(), "Scan n: %d | value: %f",i,scan[i]);
-          float Current_Q = (Q_repulsion) / (4 * PI * pow(scan[i],2));
-          // Projection of the vectors in the x , y coordinates
-          x_r -= Current_Q * cos(angle_min+theta+step*i);
-          y_r -= Current_Q * sin(angle_min+theta+step*i);
+            // Consider only valid readings within the specified range
+            if (distance > MIN_DISTANCE && distance < MAX_DISTANCE)
+            {
+                float repulsion_force = Q_repulsion / (4 * M_PI * distance * distance);
+                float angle = angle_min + theta + angle_increment * i;
+
+                // Calculate projection of the repulsion force onto x and y axes
+                x_r -= repulsion_force * cos(angle);
+                y_r -= repulsion_force * sin(angle);
+
+                ++valid_points;
+            }
+        }
+
+        // Handle cases with no valid scan points
+        if (valid_points == 0)
+        {
+            // Assign a negligible repulsion vector to avoid divide-by-zero errors later
+            V_repulsion = {0.0001f, 0.0000001f};
         }
         else
         {
-          counter += 1;
+            // Update the repulsion vector
+            V_repulsion = {x_r, y_r};
         }
-        
-      }
-      //RCLCPP_INFO(this->get_logger(), "Counter : %d  ",counter);
-      if(counter == 360)
-      {
-        V_repulsion = {0.0001,0.000000000001};
-      }
-      else
-      {
-        //RCLCPP_INFO(this->get_logger(), "x: %f | y: %f",x_r,y_r);
-        V_repulsion = {x_r, y_r};
-      }
 
-      //RCLCPP_INFO(this->get_logger(), "\n angle repulsion : %f°",atan(V_repulsion[1]/V_repulsion[0])*180/PI);
+        // Log the repulsion vector for debugging (uncomment if needed)
+        // RCLCPP_INFO(this->get_logger(), "Repulsion Vector | x: %f, y: %f", V_repulsion[0], V_repulsion[1]);
 
+        // Visualize the repulsion vector in RViz
+        geometry_msgs::msg::PoseStamped repulsion = PublishVector(V_repulsion[0], V_repulsion[1]);
+        rep_pub->publish(repulsion);
 
-      // Create the vector for Rviz
-      geometry_msgs::msg::PoseStamped repulsion = PublishVector(V_repulsion[0],V_repulsion[1]);
-      // Publish the vector
-      rep_pub->publish(repulsion);
-      // Controller
-      controller();
-
-
+        // Call the controller function to process the updated repulsion vector
+        controller();
     }
+
     // odom subsriber variable declaration
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr       sub_odom;
     // scan subsriber variable declaration
